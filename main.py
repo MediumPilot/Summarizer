@@ -42,7 +42,7 @@ app.add_middleware(
 
 class SummarizeRequest(BaseModel):
     text: str
-    max_words: Optional[int] = 200
+    max_words: Optional[int] = 50
 
 # Ensure punkt
 try:
