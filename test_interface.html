@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeSummarizer - Test Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .input-row {
+            display: flex;
+            gap: 20px;
+            align-items: end;
+        }
+
+        .input-group {
+            flex: 1;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .api-url-group {
+            flex: 2;
+        }
+
+        input[type="url"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="url"]:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #6c757d;
+            border: 2px solid #e1e5e9;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+
+        .btn-test {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .btn-test:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(250, 112, 154, 0.3);
+        }
+
+        .result-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #4facfe;
+        }
+
+        .result-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .summary-text {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e1e5e9;
+            line-height: 1.6;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid #e1e5e9;
+            font-size: 14px;
+        }
+
+        .stat-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .stat-value {
+            color: #4facfe;
+            font-weight: 700;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4facfe;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #dc3545;
+            margin-top: 15px;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #28a745;
+            margin-top: 15px;
+        }
+
+        .sample-texts {
+            margin-top: 20px;
+        }
+
+        .sample-button {
+            background: #e9ecef;
+            border: 1px solid #ced4da;
+            padding: 8px 12px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .sample-button:hover {
+            background: #dee2e6;
+            border-color: #adb5bd;
+        }
+
+        @media (max-width: 768px) {
+            .input-row {
+                flex-direction: column;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .stats {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>FreeSummarizer</h1>
+            <p>Professional Text Summarization API - Test Interface</p>
+        </div>
+        
+        <div class="main-content">
+            <form id="summarizerForm">
+                <div class="form-group">
+                    <label for="inputText">Text to Summarize:</label>
+                    <textarea 
+                        id="inputText" 
+                        name="text" 
+                        placeholder="Paste your text here to generate a summary. The API can handle large documents and will automatically chunk them for optimal processing..."
+                        required
+                    ></textarea>
+                    
+                    <div class="sample-texts">
+                        <strong>Quick samples:</strong>
+                        <button type="button" class="sample-button" onclick="loadSample('ai')">AI Article</button>
+                        <button type="button" class="sample-button" onclick="loadSample('climate')">Climate Change</button>
+                        <button type="button" class="sample-button" onclick="loadSample('tech')">Technology</button>
+                        <button type="button" class="sample-button" onclick="loadSample('short')">Short Text</button>
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="maxWords">Max Words:</label>
+                        <input type="number" id="maxWords" name="max_words" value="100" min="30" max="800">
+                    </div>
+                    
+                    <div class="api-url-group">
+                        <label for="apiUrl">API URL:</label>
+                        <input type="url" id="apiUrl" value="http://localhost:8000" placeholder="http://localhost:8000">
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="btn-primary">Summarize Text</button>
+                    <button type="button" class="btn-secondary" onclick="clearForm()">Clear</button>
+                    <button type="button" class="btn-test" onclick="testConnection()">Test API</button>
+                </div>
+            </form>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Processing your text...</p>
+            </div>
+            
+            <div id="results"></div>
+        </div>
+    </div>
+
+    <script>
+        const sampleTexts = {
+            ai: `Artificial intelligence (AI) is intelligence demonstrated by machines, in contrast to the natural intelligence displayed by humans and animals. Leading AI textbooks define the field as the study of "intelligent agents": any device that perceives its environment and takes actions that maximize its chance of successfully achieving its goals. Colloquially, the term "artificial intelligence" is often used to describe machines that mimic "cognitive" functions that humans associate with the human mind, such as "learning" and "problem solving".
+
+The scope of AI is disputed: as machines become increasingly capable, tasks considered to require "intelligence" are often removed from the definition of AI, a phenomenon known as the AI effect. A quip in Tesler's Theorem says "AI is whatever hasn't been done yet." For instance, optical character recognition is frequently excluded from things considered to be AI, having become a routine technology.
+
+Modern machine learning techniques are at the core of AI. Problems for AI applications include reasoning, knowledge representation, planning, learning, natural language processing, perception, and the ability to move and manipulate objects. General intelligence is among the field's long-term goals.`,
+
+            climate: `Climate change refers to long-term shifts in global or regional climate patterns. Since the mid-20th century, scientists have observed unprecedented changes in Earth's climate system, primarily attributed to increased levels of greenhouse gases produced by human activities. The burning of fossil fuels, deforestation, and industrial processes have significantly increased atmospheric concentrations of carbon dioxide, methane, and other greenhouse gases.
+
+The effects of climate change are wide-ranging and include rising global temperatures, melting ice caps and glaciers, rising sea levels, and more frequent extreme weather events such as hurricanes, droughts, and heatwaves. These changes pose significant threats to ecosystems, biodiversity, agriculture, water resources, and human settlements, particularly in vulnerable regions.
+
+Addressing climate change requires coordinated global action, including transitioning to renewable energy sources, improving energy efficiency, protecting and restoring forests, and developing sustainable transportation systems. International agreements like the Paris Climate Accord aim to limit global warming and promote climate resilience.`,
+
+            tech: `The rapid advancement of technology has transformed virtually every aspect of modern life. From smartphones that put the world's information at our fingertips to artificial intelligence systems that can process vast amounts of data in seconds, technological innovation continues to accelerate at an unprecedented pace.
+
+Cloud computing has revolutionized how businesses operate, allowing companies to scale their operations globally without massive infrastructure investments. Meanwhile, the Internet of Things (IoT) connects everyday objects to the internet, creating smart homes, cities, and industrial systems that can optimize themselves automatically.
+
+Emerging technologies like quantum computing, blockchain, and augmented reality promise to bring even more dramatic changes. Quantum computers could solve complex problems that are currently impossible for classical computers, while blockchain technology offers new ways to secure and verify digital transactions. As these technologies mature, they will likely create new industries and transform existing ones in ways we can barely imagine today.`,
+
+            short: `This is a short text sample that doesn't require much summarization. It's useful for testing how the API handles brief content.`
+        };
+
+        function loadSample(type) {
+            document.getElementById('inputText').value = sampleTexts[type];
+        }
+
+        function clearForm() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('maxWords').value = '100';
+            document.getElementById('results').innerHTML = '';
+        }
+
+        async function testConnection() {
+            const apiUrl = document.getElementById('apiUrl').value;
+            const resultsDiv = document.getElementById('results');
+            
+            try {
+                showLoading(true);
+                const response = await fetch(`${apiUrl}/health`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultsDiv.innerHTML = `
+                        <div class="success">
+                            <h3>✅ API Connection Successful</h3>
+                            <div class="stats">
+                                <div class="stat-item">
+                                    <span class="stat-label">Status:</span>
+                                    <span class="stat-value">${data.status}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">NLTK:</span>
+                                    <span class="stat-value">${data.nltk_status}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Max Input:</span>
+                                    <span class="stat-value">${data.limits.max_input_chars.toLocaleString()} chars</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Connection Failed</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p><strong>Troubleshooting:</strong></p>
+                        <ul>
+                            <li>Make sure the API server is running</li>
+                            <li>Check if the URL is correct</li>
+                            <li>Verify CORS settings if testing from browser</li>
+                        </ul>
+                    </div>
+                `;
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        document.getElementById('summarizerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const text = formData.get('text').trim();
+            const maxWords = parseInt(formData.get('max_words')) || 100;
+            const apiUrl = document.getElementById('apiUrl').value;
+            const resultsDiv = document.getElementById('results');
+            
+            if (!text) {
+                resultsDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Input Error</h3>
+                        <p>Please enter some text to summarize.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            try {
+                showLoading(true);
+                resultsDiv.innerHTML = '';
+                
+                const startTime = Date.now();
+                const response = await fetch(`${apiUrl}/summarize`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        text: text,
+                        max_words: maxWords
+                    })
+                });
+                
+                const endTime = Date.now();
+                const responseTime = endTime - startTime;
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const originalWords = text.split(/\s+/).length;
+                    const compressionRatio = ((originalWords - data.word_count) / originalWords * 100).toFixed(1);
+                    
+                    resultsDiv.innerHTML = `
+                        <div class="result-section">
+                            <h3>📝 Summary Result</h3>
+                            
+                            <div class="stats">
+                                <div class="stat-item">
+                                    <span class="stat-label">Words:</span>
+                                    <span class="stat-value">${data.word_count}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Method:</span>
+                                    <span class="stat-value">${data.method}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Original:</span>
+                                    <span class="stat-value">${originalWords} words</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Compression:</span>
+                                    <span class="stat-value">${compressionRatio}%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Response Time:</span>
+                                    <span class="stat-value">${responseTime}ms</span>
+                                </div>
+                            </div>
+                            
+                            <div class="summary-text">
+                                ${data.summary}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${data.detail || response.statusText}`);
+                }
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Summarization Failed</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p><strong>Possible causes:</strong></p>
+                        <ul>
+                            <li>API server is not running</li>
+                            <li>Text is too large (max 200,000 characters)</li>
+                            <li>Network connectivity issues</li>
+                            <li>Invalid API URL</li>
+                        </ul>
+                    </div>
+                `;
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Auto-detect if running on localhost and suggest local API
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            document.getElementById('apiUrl').value = 'http://localhost:8000';
+        }
+    </script>
+</body>
+</html>
